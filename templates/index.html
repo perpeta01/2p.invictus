@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines Bot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Bot de Apostas Mines</h1>
+    <button id="start-button">Iniciar Navegador</button>
+    <button id="start-betting-button" disabled>Iniciar Apostas</button>
+    <button id="stop-betting-button" disabled>Parar Apostas</button>
+
+    <div id="status"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#start-button').click(function() {
+                $.post('/start', function(data) {
+                    $('#status').text(data.status);
+                    $('#start-betting-button').prop('disabled', false);
+                });
+            });
+
+            $('#start-betting-button').click(function() {
+                $.post('/start_betting', function(data) {
+                    $('#status').text(data.status);
+                    $('#stop-betting-button').prop('disabled', false);
+                }).fail(function(xhr) {
+                    $('#status').text(xhr.responseJSON.status);
+                });
+            });
+
+            $('#stop-betting-button').click(function() {
+                $.post('/stop_betting', function(data) {
+                    $('#status').text(data.status);
+                    $('#stop-betting-button').prop('disabled', true);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
